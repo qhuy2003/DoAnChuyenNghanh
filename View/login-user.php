@@ -5,8 +5,8 @@ require_once '../vendor/autoload.php';
 
 // create Client Request to access Google API
 $client = new Google_Client();
-$client->setClientId('676177425201-fetlcecpsng4ohg29sqqjr55vkq1ri3k.apps.googleusercontent.com'); 
-$client->setClientSecret('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'); 
+$client->setClientId(''); 
+$client->setClientSecret(''); 
 $client->setRedirectUri('http://localhost:3000/View/login-user.php'); 
 $client->addScope('email');
 $client->addScope('profile');
