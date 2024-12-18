@@ -6,13 +6,13 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
     # Validation helper function
-    include "func-validation.php";
+    include "../Controller/func-validation.php";
 
     # File Upload helper function
-    include "func-file-upload.php";
+    include "../Controller/func-file-upload.php";
 
 
   
@@ -111,12 +111,12 @@ if (isset($_SESSION['user_id']) &&
 		     if ($res) {
 		     	# thong bao thanh cong
 		     	$sm = "Thêm sách thành công";
-				header("Location: ../add-book.php?success=$sm");
+				header("Location: ../View/add-book.php?success=$sm");
 	            exit;
 		     }else{
 		     	# thong bao loi
 		     	$em = "xảy ra lỗi!";
-				header("Location: ../add-book.php?error=$em");
+				header("Location: ../View/add-book.php?error=$em");
 	            exit;
 		     }
 

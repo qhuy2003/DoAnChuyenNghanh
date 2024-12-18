@@ -31,7 +31,7 @@ function upload_file($files, $allowed_exs, $path){
 			$new_file_name = uniqid("",true).'.'.$file_ex_lc;
 
 			# assigning upload path
-			$file_upload_path = '../../uploads/'.$path.'/'.$new_file_name;
+			$file_upload_path = '../uploads/'.$path.'/'.$new_file_name;
 			/** 
 			  moving uploaded file to 
 			  root directory upload/$path folder

@@ -15,10 +15,10 @@ if (isset($_SESSION['user_id']) &&
 	$id = $_GET['id'];
 
 	
-	include "db_conn.php";
+	include "../config/db_conn.php";
 
    
-	include "php/func-category.php";
+	include "../Controller/func-category.php";
     $category = get_category($conn, $id);
     
     # id khong hop le
@@ -79,7 +79,7 @@ if (isset($_SESSION['user_id']) &&
 		    </div>
 		  </div>
 		</nav>
-     <form action="php/edit-category.php"
+     <form action="../Model/edit-category.php"
            method="post" 
            class="shadow p-4 rounded mt-5"
            style="width: 90%; max-width: 50rem;">

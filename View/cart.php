@@ -1,11 +1,9 @@
 <?php
 session_start();
-include 'db_conn.php';
+include '../config/db_conn.php';
 
-if(isset($_COOKIE['user_id'])){
-   $user_id = $_COOKIE['user_id'];
-}else{
-   setcookie('user_id', create_unique_id(), time() + 60*60*24*30);
+if(isset($_SESSION['user_id'])){
+   $user_id =$_SESSION['user_id'];
 }
 
 if(isset($_POST['update_cart'])){
@@ -18,7 +16,7 @@ if(isset($_POST['update_cart'])){
    $update_qty = $conn->prepare("UPDATE `cart` SET qty = ? WHERE id = ?");
    $update_qty->execute([$qty, $cart_id]);
 
-   $success_msg[] = 'Cart quantity updated!';
+   $success_msg[] = 'Cập nhật thành công!';
 
 }
 
@@ -33,9 +31,9 @@ if(isset($_POST['delete_item'])){
    if($verify_delete_item->rowCount() > 0){
       $delete_cart_id = $conn->prepare("DELETE FROM `cart` WHERE id = ?");
       $delete_cart_id->execute([$cart_id]);
-      $success_msg[] = 'Cart item deleted!';
+      $success_msg[] = 'Giỏ hàng đã xóa!';
    }else{
-      $warning_msg[] = 'Cart item already deleted!';
+      $warning_msg[] = 'Giỏ hàng đã được xóa!';
    } 
 
 }
@@ -78,27 +76,28 @@ if(isset($_POST['empty_cart'])){
 
 <!-- Header -->
    <header id="header">
-   <i class="fa-solid fa-user"></i>
+   <div class="dropdown show" style="margin:1px;">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> 
+         <?php if (isset($_SESSION['user_id'])) : ?>
+         <?php echo $_SESSION['email']; ?>
+         <?php else: ?>
+              Tài khoản
+         <?php endif; ?>
+        </a>
+      
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="View/login-user.php">Đăng nhập</a>
+          <a class="dropdown-item" href="View/registration.php">Đăng ký</a>
+         <?php if (isset($_SESSION['user_id'])): ?> <!-- neu dang nhap se hien -->
+            <a class="dropdown-item" href="../Controller/logout-user.php">Đăng xuất</a>
+          <?php endif; ?>
+        </div>
+      </div>	
 
-   <?php 
         
-   if(isset($_SESSION['email'])){
-      echo"<a>Hi! ".$_SESSION['email']."</a>";
-   }
    
-        else 
-        {
-        }
-   if(!isset($_SESSION['email'])){
-            echo "<a href='View/login-user.php'>Đăng nhập</a>";
-        }
-            
-
-        else {
-      echo "<a href='View/logout-user.php'>| Logout</a>";
-
-        }
-        ?>			
+   		
             
    <div class="inner">
 
@@ -138,9 +137,9 @@ if(isset($_POST['empty_cart'])){
       <ul>
          <li><a href="../index.php" class="active">Trang chủ</a></li>
 
-         <li><a href="View/view-product.php">Sản phẩm</a></li>
+         <li><a href="view-product.php">Sản phẩm</a></li>
        
-         <li><a href="View/checkout.html">Giỏ hàng</a></li>
+         <li><a href="checkout.html">Giỏ hàng</a></li>
 
          <li class="nav-item dropdown">
 <a href="#" class="dropdown-toggle nav-link">Thể loại</a>
@@ -179,14 +178,13 @@ if(isset($_POST['empty_cart'])){
          $select_products->execute([$fetch_cart['product_id']]);
          if($select_products->rowCount() > 0){
             $fetch_product = $select_products->fetch(PDO::FETCH_ASSOC);
-      
    ?>
    <form action="" method="POST" class="box-cart">
       <input type="hidden" name="cart_id" value="<?= $fetch_cart['id']; ?>">
       <img src="../Uploads/cover/<?= $fetch_product['cover']; ?>" class="image" alt="" width="200px">
       <h3 class="name"><?= $fetch_product['title'] ?></h3>
       <div class="flex">
-         <p class="price"> <?= $fetch_cart['price']; ?> đ</p>
+         <p class="price"> <?= number_format($fetch_cart['price'],0,',','.'); ?> đ</p>
          <input type="number" name="qty" required min="1" value="<?= $fetch_cart['qty']; ?>" max="99" maxlength="2" class="qty">
          <button type="submit" name="update_cart" class="fas fa-edit">
          </button>

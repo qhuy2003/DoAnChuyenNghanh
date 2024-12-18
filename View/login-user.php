@@ -1,5 +1,6 @@
 <?php  
 session_start();
+include '../config/db_conn.php';
 // init configuration
 require_once '../vendor/autoload.php';
 
@@ -30,14 +31,30 @@ if (isset($_GET['code'])) {
     $google_oauth = new Google\Service\Oauth2($client);  
     $google_account_info = $google_oauth->userinfo->get();
 
-    // Lưu thông tin người dùng vào session
-	session_start();
+	$google_user_id = $google_account_info->id;
+	$email = $google_account_info->email;
+	$name = $google_account_info->name;
 
-	// Sau khi người dùng đăng nhập qua Google và nhận thông tin
-	$_SESSION['user_id'] = $google_account_info->id;
-	$_SESSION['email'] = $google_account_info->email;
-	$_SESSION['name'] = $google_account_info->name;
-	
+	// Kiểm tra nếu user chưa tồn tại trong cơ sở dữ liệu
+	$stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+	$stmt->execute([$email]);
+
+	if ($stmt->rowCount() == 0) {
+	// Nếu user không tồn tại, thêm bản ghi mới vào users
+	$insert_user = $conn->prepare("INSERT INTO users (google_id, email) VALUES (?, ?)");
+	$insert_user->execute([$google_user_id, $email]);
+
+	// Lấy ID vừa tạo
+	$user_id = $conn->lastInsertId();
+	} else {
+	// Nếu đã tồn tại, lấy ID hiện tại
+	$user = $stmt->fetch(PDO::FETCH_ASSOC);
+	$user_id = $user['id'];
+	}
+
+	// Lưu user_id vào session
+	$_SESSION['user_id'] = $user_id;
+	$_SESSION['email'] = $email;
 	// Chuyển hướng về trang index.php
 	header('Location: view-product.php');
 	exit();

@@ -22,11 +22,12 @@ session_start();
 				<!-- Header -->
 					<header id="header">
 					<div class="dropdown show" style="margin:1px;">
+					<!-- dang nhap  -->
   <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  <i class="fa-solid fa-user"></i>  <?php if (isset($_SESSION['user_id'])): ?> <!-- Check if the user is logged in -->
+  <i class="fa-solid fa-user"></i>  <?php if (isset($_SESSION['user_id'])): ?> 
       <?php echo $_SESSION['email']; ?> <!-- Display user's name -->
     <?php else: ?>
-      Tài Khoản <!-- Default text if not logged in -->
+      Tài Khoản <!-- chua dang nhap -->
     <?php endif; ?>
 
   </a>
@@ -49,7 +50,7 @@ session_start();
 								<span class="fa fa-book"></span>
 								<span class="title">Nhà sách Quốc Huy</span>
 								</a>
-								<form action="search.php" method="get"  style="width:400px;">
+								<form action="../Model/search.php" method="get"  style="width:400px;">
 								<div class="input-group my-5">
 									<input type="text" class="form-control" name="key" placeholder="Tìm kiếm sách" 
 										aria-label="Search Book..." aria-describedby="basic-addon2">

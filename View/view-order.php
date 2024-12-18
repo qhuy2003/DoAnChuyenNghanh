@@ -2,10 +2,8 @@
 session_start();
 include '../config/db_conn.php';
 
-if(isset($_COOKIE['user_id'])){
-	$user_id = $_COOKIE['user_id'];
- }else{
-	setcookie('user_id', create_unique_id(), time() + 60*60*24*30);
+if(isset($_SESSION['user_id'])){
+	$user_id = $_SESSION['user_id'];
  }
  
  if(isset($_GET['id'])){
@@ -18,7 +16,13 @@ if(isset($_COOKIE['user_id'])){
  if(isset($_POST['cancel'])){
  
 	$update_orders = $conn->prepare("UPDATE `orders` SET status = ? WHERE id = ?");
-	$update_orders->execute(['canceled', $get_id]);
+	$update_orders->execute(['đã hủy', $get_id]);
+	header('location:order.php');
+ 
+ }if(isset($_POST['delivered'])){
+ 
+	$update_orders = $conn->prepare("UPDATE `orders` SET status = ? WHERE id = ?");
+	$update_orders->execute(['Đã nhận hàng', $get_id]);
 	header('location:order.php');
  
  }
@@ -155,11 +159,12 @@ if(isset($_COOKIE['user_id'])){
 	  <p class="user"><i class="fas fa-map-marker-alt"></i> <?= $fetch_order['address']; ?></p>
 	  <p class="title">Trạng thái</p>
 	  <p class="status" style="color:<?php if($fetch_order['status'] == 'delivered'){echo 'green';}elseif($fetch_order['status'] == 'canceled'){echo 'red';}else{echo 'orange';}; ?>"><?= $fetch_order['status']; ?></p>
-	  <?php if($fetch_order['status'] == 'canceled'){ ?>
-		 <a href="checkout.php?id=<?= $fetch_product['id']; ?>" class="btn">Đặt lại</a>
+	  <?php if($fetch_order['status'] == 'đã hủy'){ ?>
+		 <button><a href="checkout.php?id=<?= $fetch_product['id']; ?>" class="btn">Đặt lại</a></button>
 	  <?php }else{ ?>
 	  <form action="" method="POST">
-		 <input type="submit" value="cancel order" name="cancel" class="delete-btn" onclick="return confirm('cancel this order?');">
+	  <input type="submit" value="Đã nhận hàng" name="delivered" class="delete-btn" onclick="return confirm('Xác nhận đã nhận ');">
+		 <input type="submit" value="Hủy đơn hàng" name="cancel" class="delete-btn" onclick="return confirm('Hủy đơn hàng này ?');">
 	  </form>
 	  <?php } ?>
    </div>

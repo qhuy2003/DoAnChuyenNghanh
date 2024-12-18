@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
 
     // /** 
@@ -19,7 +19,7 @@ if (isset($_SESSION['user_id']) &&
 
 		# form Validation
 		if (empty($name)) {
-			$em = "The category name is required";
+			$em = " chưa nhập tên thể loại";
 			header("Location: ../add-category.php?error=$em");
             exit;
 		}else {
@@ -35,20 +35,20 @@ if (isset($_SESSION['user_id']) &&
 		     if ($res) {
 		     	
 		     	$sm = "Thêm thành công!";
-				header("Location: ../add-category.php?success=$sm");
+				header("Location: ../View/add-category.php?success=$sm");
 	            exit;
 		     }else{
-		     	$em = "Không hợp lệ!";
+				$em = "xảy ra lỗi!";			
 				header("Location: ../add-category.php?error=$em");
 	            exit;
 		     }
 		}
 	}else {
-      header("Location: ../admin.php");
+      header("Location: ../View/admin.php");
       exit;
 	}
 
 }else{
-  header("Location: ../login.php");
-  exit;
+	header("Location: ../View/login.php");
+	exit;
 }

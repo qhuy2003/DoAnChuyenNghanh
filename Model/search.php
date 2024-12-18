@@ -9,18 +9,18 @@ if (!isset($_GET['key']) || empty($_GET['key'])) {
 $key = $_GET['key'];
 
 # Database Connection File
-include "View/db_conn.php";
+include "../config/db_conn.php";
 
 
-include "View/php/func-book.php";
+include "../Controller/func-book.php";
 $books = search_books($conn, $key);
 
 
-include "View/php/func-author.php";
+include "../Controller/func-author.php";
 $authors = get_all_author($conn);
 
 
-include "View/php/func-category.php";
+include "../Controller/func-category.php";
 $categories = get_all_categories($conn);
 
  ?>
@@ -31,12 +31,12 @@ $categories = get_all_categories($conn);
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Nhà sách Quốc Huy</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-		<link rel="stylesheet" href="View/assets/bootstrap/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="View/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="View/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="../View/assets/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../View/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../View/assets/css/noscript.css" /></noscript>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 	
@@ -44,7 +44,7 @@ $categories = get_all_categories($conn);
 						<div class="inner">
 
 							<!-- Logo -->
-								<a href="index.php" class="logo">
+								<a href="../index.php" class="logo">
 									<span class="fa fa-book"></span> <span class="title">Nhà sách Quốc Huy</span>
 									
 								</a>
@@ -63,7 +63,7 @@ $categories = get_all_categories($conn);
 		  <button class="input-group-text
 		                 btn btn-primary" 
 		          id="basic-addon2">
-		          <img src="View/images/search.png"
+		          <img src="../View/images/search.png"
 		               width="20">
 
 		  </button>
@@ -83,39 +83,15 @@ $categories = get_all_categories($conn);
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="index.php" class="active">Trang chủ</a></li>
+							<li><a href="../index.php" class="active">Trang chủ</a></li>
 
 							<li><a href="View/products.html">Sản phẩm</a></li>
-
-							<li><a href="View/checkout.html">Giỏ hàng</a></li>
-
-							<li>
-								<a href="#" class="dropdown-toggle">Thể loại</a>
-
-								<ul>
-									<li><a href="View/about.html">About Us</a></li>
-									<li><a href="View/blog.html">Blog</a></li>
-									<li><a href="View/testimonials.html">Testimonials</a></li>
-									<li><a href="View/terms.html">Terms</a></li>
-									
-								</ul>
-							</li>
-							<li >
-		          <?php if (isset($_SESSION['user_id'])) {?>
-		          	<a  
-		             href="View/admin.php">Admin</a>
-		          <?php }else{ ?>
-		          <a 
-		             href="View/login.php">Login</a>
-		          <?php } ?>
-
-		        </li>	
 
 							<li><a href="View/contact.html">Contact Us</a></li>
 						</ul>
 					</nav>
 					<div class="container">	
-		Search result for <b><?=$key?></b>
+		Kếu quả của từ khóa <b><?=$key?></b>
 
 		<div class="d-flex pt-3">
 			<?php if ($books == 0){ ?>
@@ -131,14 +107,14 @@ $categories = get_all_categories($conn);
 			<div class="pdf-list d-flex flex-wrap">
 				<?php foreach ($books as $book) { ?>
 				<div class="card m-1">
-					<img src="uploads/cover/<?=$book['cover']?>"
+					<img src="../uploads/cover/<?=$book['cover']?>"
 					     class="card-img-top">
 					<div class="card-body">
 						<h5 class="card-title"	>
 							<?=$book['title']?>
 						</h5>
 						<p class="card-text">
-							<i><b>By:
+							<i><b>Tác giả:
 								<?php foreach($authors as $author){ 
 									if ($author['id'] == $book['author_id']) {
 										echo $author['name'];
@@ -149,7 +125,7 @@ $categories = get_all_categories($conn);
 								<?php } ?>
 							<br></b></i>
 							<?=$book['description']?>
-							<br><i><b>Category:
+							<br><i><b>Thể loại:
 								<?php foreach($categories as $category){ 
 									if ($category['id'] == $book['category_id']) {
 										echo $category['name'];
@@ -173,10 +149,11 @@ $categories = get_all_categories($conn);
 		<?php } ?>
 		</div>
 	</div>
-	<script src="View/assets/js/jquery.min.js"></script>
-			<script src="View/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-			<script src="View/assets/js/jquery.scrolly.min.js"></script>
-			<script src="View/assets/js/jquery.scrollex.min.js"></script>
-			<script src="View/assets/js/main.js"></script>
+	
 </body>
 </html>
+<script src="../View/assets/js/jquery.min.js"></script>
+<script src="../View/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../View/assets/js/jquery.scrolly.min.js"></script>
+<script src="../View/assets/js/jquery.scrollex.min.js"></script>
+<script src="../View/assets/js/main.js"></script>

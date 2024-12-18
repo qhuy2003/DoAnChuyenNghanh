@@ -1,10 +1,8 @@
 <?php 
 include '../config/db_conn.php';
-
-if(isset($_COOKIE['user_id'])){
-    $user_id=$_COOKIE['user_id'];//Nếu cookie user_id tồn tại, giá trị của nó được gán vào biến $user_id.
-}else {
-    setcookie('user_id',create_unique_id(),time(),+60*60*24*30);// thoi diem cookie het han 30 ngay
+session_start();
+if (isset($_SESSION['user_id'])) {
+   $user_id = $_SESSION['user_id']; // Lấy user_id từ session
 }
 
 ?>
@@ -26,27 +24,24 @@ if(isset($_COOKIE['user_id'])){
 
 <!-- Header -->
    <header id="header">
-   <i class="fa-solid fa-user"></i>
-
-   <?php 
-        
-   if(isset($_SESSION['email'])){
-      echo"<a>Hi! ".$_SESSION['email']."</a>";
-   }
-   
-        else 
-        {
-        }
-   if(!isset($_SESSION['email'])){
-            echo "<a href='View/login-user.php'>Đăng nhập</a>";
-        }
-            
-
-        else {
-      echo "<a href='View/logout-user.php'>| Logout</a>";
-
-        }
-        ?>			
+   <div class="dropdown show" style="margin:1px;">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> 
+         <?php if (isset($_SESSION['user_id'])) : ?>
+         <?php echo $_SESSION['email']; ?>
+         <?php else: ?>
+              Tài khoản
+         <?php endif; ?>
+        </a>
+      
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="View/login-user.php">Đăng nhập</a>
+          <a class="dropdown-item" href="View/registration.php">Đăng ký</a>
+         <?php if (isset($_SESSION['user_id'])): ?> <!-- neu dang nhap se hien -->
+            <a class="dropdown-item" href="../Controller/logout-user.php">Đăng xuất</a>
+          <?php endif; ?>
+        </div>
+      </div>	
             
    <div class="inner">
 
@@ -79,25 +74,7 @@ if(isset($_COOKIE['user_id'])){
        
          <li><a href="View/checkout.html">Giỏ hàng</a></li>
 
-         <li class="nav-item dropdown">
-<a href="#" class="dropdown-toggle nav-link">Thể loại</a>
-<ul class="dropdown-menu">
-<li><a class="dropdown-item" href="View/about.html">Văn học</a></li>
-<li><a class="dropdown-item" href="View/test.php">Kỹ năng sống</a></li>
-<li><a class="dropdown-item" href="View/testimonials.html">Testimonials</a></li>
-<li><a class="dropdown-item" href="View/terms.html">Terms</a></li>
-</ul>
-</li>
-         <li >
-    <?php if (isset($_SESSION['user_id'])) {?>
-       <a  
-       href="View/admin.php">Admin</a>
-    <?php }else{ ?>
-    <a 
-       href="View/login.php">Login</a>
-    <?php } ?>
-
-  </li>	
+      
 
          <li><a href="View/contact.html">Contact Us</a></li>
       </ul>
@@ -108,7 +85,7 @@ if(isset($_COOKIE['user_id'])){
         <h1 class="heading">Đơn hàng của tôi</h1>
         <div class="box-container">
             <?php
-            $select_orders=$conn->prepare("SELECT * FROM `orders` WHERE user_id=? ORDER BY date DESC"); 
+            $select_orders=$conn->prepare("SELECT * FROM `orders` WHERE user_id = ? ORDER BY date DESC"); 
             $select_orders->execute([$user_id]);
             if ($select_orders->rowCount() > 0) {
                 while($fetch_order=$select_orders->fetch(PDO::FETCH_ASSOC)){
@@ -123,7 +100,7 @@ if(isset($_COOKIE['user_id'])){
          <img src="../Uploads/cover/<?= $fetch_product['cover']; ?>" class="image" alt="" width="400px">
          <h3 class="name"><?= $fetch_product['title']; ?></h3>
          <p class="price"><?= number_format($fetch_product['price'], 0, ',', '.'); ?> đ</p>
-         <p class="status" style="color:<?php if($fetch_order['status'] == 'delivered'){echo 'green';}elseif($fetch_order['status'] == 'canceled'){echo 'red';}else{echo 'orange';}; ?>"><?= $fetch_order['status']; ?></p>
+         <p class="status" style="color:<?php if($fetch_order['status'] == 'Đã nhận hàng'){echo 'green';}elseif($fetch_order['status'] == 'đã hủy'){echo 'red';}else{echo 'orange';}; ?>"><?= $fetch_order['status']; ?></p>
       </a>
    </div>
    <?php

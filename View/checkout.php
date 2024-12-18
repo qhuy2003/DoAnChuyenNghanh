@@ -3,10 +3,8 @@
 session_start();
 include '../config/db_conn.php';
 
-if(isset($_COOKIE['user_id'])){
-   $user_id = $_COOKIE['user_id'];
-}else{
-   setcookie('user_id', create_unique_id(), time() + 60*60*24*30);
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
 }
 
 if(isset($_POST['place_order'])){
@@ -38,7 +36,7 @@ if(isset($_POST['place_order'])){
             header('location:order.php');
          }
       }else{
-         $warning_msg[] = 'Something went wrong!';
+         $warning_msg[] = 'Xảy ra lỗi!';
       }
 
    }elseif($verify_cart->rowCount() > 0){ // gio hang
@@ -57,7 +55,7 @@ if(isset($_POST['place_order'])){
       }
 
    }else{
-      $warning_msg[] = 'Your cart is empty!';
+      $warning_msg[] = 'Giỏ hàng trống!';
    }
 
 }
@@ -81,27 +79,24 @@ if(isset($_POST['place_order'])){
 
 <!-- Header -->
    <header id="header">
-   <i class="fa-solid fa-user"></i>
-
-   <?php 
-        
-   if(isset($_SESSION['email'])){
-      echo"<a>Hi! ".$_SESSION['email']."</a>";
-   }
-   
-        else 
-        {
-        }
-   if(!isset($_SESSION['email'])){
-            echo "<a href='View/login-user.php'>Đăng nhập</a>";
-        }
-            
-
-        else {
-      echo "<a href='View/logout-user.php'>| Logout</a>";
-
-        }
-        ?>			
+   <div class="dropdown show" style="margin:1px;">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> 
+         <?php if (isset($_SESSION['user_id'])) : ?>
+         <?php echo $_SESSION['email']; ?>
+         <?php else: ?>
+              Tài khoản
+         <?php endif; ?>
+        </a>
+      
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="View/login-user.php">Đăng nhập</a>
+          <a class="dropdown-item" href="View/registration.php">Đăng ký</a>
+         <?php if (isset($_SESSION['user_id'])): ?> <!-- neu dang nhap se hien -->
+            <a class="dropdown-item" href="../Controller/logout-user.php">Đăng xuất</a>
+          <?php endif; ?>
+        </div>
+      </div>	
             
    <div class="inner">
 
@@ -111,6 +106,7 @@ if(isset($_POST['place_order'])){
             <span class="fa fa-book"></span>
             <span class="title">Nhà sách Quốc Huy</span>
             </a>
+            
          </div>		
 
          <!-- Nav -->
@@ -118,7 +114,6 @@ if(isset($_POST['place_order'])){
                <ul>
                   <li><a href="#menu">Menu</a></li>
                </ul>
-               
             </nav>
 
       </div>
@@ -234,18 +229,7 @@ if(isset($_POST['place_order'])){
                 </label>
             </div>
         </form>
-            <!-- <div class="box">
-               <p>address line 01 <span>*</span></p>
-               <input type="text" name="flat" required maxlength="50" placeholder="e.g. flat & building number" class="input">
-               <p>address line 02 <span>*</span></p>
-               <input type="text" name="street" required maxlength="50" placeholder="e.g. street name & locality" class="input">
-               <p>city name <span>*</span></p>
-               <input type="text" name="city" required maxlength="50" placeholder="enter your city name" class="input">
-               <p>country name <span>*</span></p>
-               <input type="text" name="country" required maxlength="50" placeholder="enter your country name" class="input">
-               <p>pin code <span>*</span></p>
-               <input type="number" name="pin_code" required maxlength="6" placeholder="e.g. 123456" class="input" min="0" max="999999">
-            </div> -->
+            
         
          </div>
       </form>
@@ -294,7 +278,7 @@ if(isset($_POST['place_order'])){
          <img src="../Uploads/cover/<?= $fetch_product['cover']; ?>" class="image" alt="">
          <div class="checkout-cart">
                <h3 class="name"><?= $fetch_product['title']; ?></h3>
-               <p class="price"> <?= $fetch_product['price']; ?> đ x <?= $fetch_cart['qty'] ; ?> đ</p>
+               <p class="price"> <?= number_format($fetch_product['price'], 0, ',', '.'); ?> đ x <?= $fetch_cart['qty'] ; ?> đ</p>
             </div>
          </div>
          <?php
@@ -304,7 +288,7 @@ if(isset($_POST['place_order'])){
                }
             }
          ?>
-         <div class="grand-total"><span><strong></strong>Tổng cộng :</span><p> <?= $grand_total; ?> đ</p></div>
+         <div class="grand-total"><span><strong></strong>Tổng cộng :</span><p> <?=number_format( $grand_total, 0, ',', '.'); ?> đ</p></div>
          <div class="placeorder">
             <input type="submit" value="Đặt Hàng" name="place_order" class="btn">
             

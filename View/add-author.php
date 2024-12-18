@@ -56,7 +56,7 @@ if (isset($_SESSION['user_id']) &&
 		    </div>
 		  </div>
 		</nav>
-     <form action="php/add-author.php"
+     <form action="../Model/add-author.php"
            method="post" 
            class="shadow p-4 rounded mt-5"
            style="width: 90%; max-width: 50rem;">

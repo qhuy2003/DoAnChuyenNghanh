@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
 
     /** 
@@ -23,7 +23,7 @@ if (isset($_SESSION['user_id']) &&
 		#simple form Validation
 		if (empty($name)) {
 			$em = "The author name is required";
-			header("Location: ../add-author.php?error=$em");
+			header("Location: ../View/add-author.php?error=$em");
             exit;
 		}else {
 			# Insert Into Database
@@ -38,22 +38,22 @@ if (isset($_SESSION['user_id']) &&
 		    **/
 		     if ($res) {
 		     	# success message
-		     	$sm = "Successfully created!";
-				header("Location: ../add-author.php?success=$sm");
+		     	$sm = "Them thanh cong!";
+				header("Location: ../View/add-author.php?success=$sm");
 	            exit;
 		     }else{
 		     	# Error message
-		     	$em = "Unknown Error Occurred!";
-				header("Location: ../add-author.php?error=$em");
+		     	$em = "Khong the them !";
+				header("Location: ../View/add-author.php?error=$em");
 	            exit;
 		     }
 		}
 	}else {
-      header("Location: ../admin.php");
+      header("Location: ../View/admin.php");
       exit;
 	}
 
 }else{
-  header("Location: ../login.php");
+  header("Location: ../View/login.php");
   exit;
 }

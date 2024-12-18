@@ -9,11 +9,11 @@ if (isset($_SESSION['user_id']) &&
 	include "../config/db_conn.php";
 
     # Category helper function
-	include "php/func-category.php";
+	include "../Controller/func-category.php";
     $categories = get_all_categories($conn);
 
     # author helper function
-	include "php/func-author.php";
+	include "../Controller/func-author.php";
     $authors = get_all_author($conn);
 
     if (isset($_GET['title'])) {
@@ -95,7 +95,7 @@ if (isset($_SESSION['user_id']) &&
 		    </div>
 		  </div>
 		</nav>
-     <form action="php/add-book.php"
+     <form action="../Model/add-book.php"
            method="post"
            enctype="multipart/form-data" 
            class="shadow p-4 rounded mt-5"
@@ -143,7 +143,7 @@ if (isset($_SESSION['user_id']) &&
 		</div>
 		<div class="mb-3">
 		    <label class="form-label">
-		           Thông tin chi tiết
+		           Mô tả sản phẩm
 		           </label>
 		    <input type="text" 
 		           class="form-control" 

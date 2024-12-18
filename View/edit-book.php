@@ -15,10 +15,10 @@ if (isset($_SESSION['user_id']) &&
 	$id = $_GET['id'];
 
 	# Database Connection File
-	include "db_conn.php";
+	include "../config/db_conn.php";
 
 	# Book helper function
-	include "php/func-book.php";
+	include "../Controller/func-book.php";
     $book = get_book($conn, $id);
     
     # If the ID is invalid
@@ -29,11 +29,11 @@ if (isset($_SESSION['user_id']) &&
     }
 
     # Category helper function
-	include "php/func-category.php";
+	include "../Controller/func-category.php";
     $categories = get_all_categories($conn);
 
     # author helper function
-	include "php/func-author.php";
+	include "../Controller/func-author.php";
     $authors = get_all_author($conn);
 
 ?>
@@ -82,13 +82,13 @@ if (isset($_SESSION['user_id']) &&
 		        </li>
 		        <li class="nav-item">
 		          <a class="nav-link" 
-		             href="logout.php">Đăng xuất</a>
+		             href="../Controller/logout.php">Đăng xuất</a>
 		        </li>
 		      </ul>
 		    </div>
 		  </div>
 		</nav>
-     <form action="php/edit-book.php"
+     <form action="../Model/edit-book.php"
            method="post"
            enctype="multipart/form-data" 
            class="shadow p-4 rounded mt-5"

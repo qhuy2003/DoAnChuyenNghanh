@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
 
     /** 
@@ -39,21 +39,21 @@ if (isset($_SESSION['user_id']) &&
 		     if ($res) {
 		     	# success message
 		     	$sm = "xóa thể loại thành công!";
-				header("Location: ../admin.php?success=$sm");
-	            exit;
+				 header("Location: ../View/admin.php?success=$sm");
+				 exit;
 			 }else {
 			 	$em = "Error Occurred!";
-			    header("Location: ../admin.php?error=$em");
-                exit;
+				 header("Location: ../View/admin.php?success=$sm");
+				 exit;
 			 }
              
 		}
 	}else {
-      header("Location: ../admin.php");
-      exit;
+		header("Location: ../View/admin.php");
+		exit;
 	}
 
 }else{
-  header("Location: ../login.php");
-  exit;
+	header("Location: ../View/admin.php");
+	exit;
 }

@@ -15,10 +15,10 @@ if (isset($_SESSION['user_id']) &&
 	$id = $_GET['id'];
 
 	# Database Connection File
-	include "db_conn.php";
+	include "../config/db_conn.php";
 
     # author helper function
-	include "php/func-author.php";
+	include "../Controller/func-author.php";
     $author = get_author($conn, $id);
     
     # If the ID is invalid
@@ -51,11 +51,7 @@ if (isset($_SESSION['user_id']) &&
 		    <div class="collapse navbar-collapse" 
 		         id="navbarSupportedContent">
 		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-		        <li class="nav-item">
-		          <a class="nav-link" 
-		             aria-current="page" 
-		             href="../index.php">Trang chủ</a>
-		        </li>
+		        
 		        <li class="nav-item">
 		          <a class="nav-link" 
 		             href="add-book.php">Thêm sách</a>
@@ -76,7 +72,7 @@ if (isset($_SESSION['user_id']) &&
 		    </div>
 		  </div>
 		</nav>
-     <form action="php/edit-author.php"
+     <form action="../Model/edit-author.php"
            method="post" 
            class="shadow p-4 rounded mt-5"
            style="width: 90%; max-width: 50rem;">

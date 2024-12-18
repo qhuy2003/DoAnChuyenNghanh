@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
 
     /** 
@@ -22,8 +22,8 @@ if (isset($_SESSION['user_id']) &&
 
 		#simple form Validation
 		if (empty($id)) {
-			$em = "Error Occurred!";
-			header("Location: ../admin.php?error=$em");
+			$em = "Xảy ra lỗi!";
+			header("Location: ../View/admin.php?error=$em");
             exit;
 		}else {
              # GET book from Database
@@ -57,27 +57,27 @@ if (isset($_SESSION['user_id']) &&
 
 			     	# success message
 			     	$sm = "Xóa sách thành công!";
-					header("Location: ../admin.php?success=$sm");
-		            exit;
+					 header("Location: ../View/admin.php?error=$sm");
+					 exit;
 			     }else{
 			     	# Error message
-			     	$em = "Unknown Error Occurred!";
-					header("Location: ../admin.php?error=$em");
-		            exit;
+			     	$em = "Xảy ra lỗi!";
+					 header("Location: ../View/admin.php?error=$em");
+					 exit;
 			     }
 			 }else {
-			 	$em = "Error Occurred!";
-			    header("Location: ../admin.php?error=$em");
-                exit;
+			 	$em = "Xảy ra lỗi!";
+				 header("Location: ../View/admin.php?error=$em");
+				 exit;
 			 }
              
 		}
 	}else {
-      header("Location: ../admin.php");
-      exit;
+		header("Location: ../View/admin.php?error=$em");
+		exit;
 	}
 
 }else{
-  header("Location: ../login.php");
-  exit;
+	header("Location: ../View/admin.php?error=$em");
+	exit;
 }

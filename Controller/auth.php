@@ -5,7 +5,7 @@ if (isset($_POST['email']) &&
 	isset($_POST['password'])) {
     
     # Database Connection File
-	include "../../config/db_conn.php";
+	include "../config/db_conn.php";
     
     # Validation helper function
 	include "func-validation.php";
@@ -42,7 +42,7 @@ if (isset($_POST['email']) &&
     		if (password_verify($password, $user_password)) {
     			$_SESSION['user_id'] = $user_id;
     			$_SESSION['user_email'] = $user_email;
-    			header("Location: ../admin.php");
+    			header("Location: ../View/admin.php");
     		}else {
     			# Error message
     	        $em = "Incorrect User name or password";

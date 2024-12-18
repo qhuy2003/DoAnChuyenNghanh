@@ -47,11 +47,7 @@ if (isset($_SESSION['user_id']) &&
 		    <div class="collapse navbar-collapse" 
 		         id="navbarSupportedContent">
 		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-		        <li class="nav-item">
-		          <a class="nav-link" 
-		             aria-current="page" 
-		             href="../index.php">Trang chủ</a>
-		        </li>
+		       
 		        <li class="nav-item">
 		          <a class="nav-link" 
 		             href="add-book.php">Thêm sách</a>
@@ -66,7 +62,7 @@ if (isset($_SESSION['user_id']) &&
 		        </li>
 		        <li class="nav-item">
 		          <a class="nav-link" 
-		             href="logout.php">Đăng xuất</a>
+		             href="../Controller/logout.php">Đăng xuất</a>
 		        </li>
 		      </ul>
 		    </div>
@@ -172,7 +168,7 @@ if (isset($_SESSION['user_id']) &&
             <td><?=$book['price']?></td>
             <td>
                 <a href="edit-book.php?id=<?=$book['id']?>" class="btn btn-warning">Sửa</a>
-                <a href="php/delete-book.php?id=<?=$book['id']?>" class="btn btn-danger">Xóa</a>
+                <a href="../Model/delete-book.php?id=<?=$book['id']?>" class="btn btn-danger">Xóa</a>
             </td>
         </tr>
         <?php } ?>
@@ -218,7 +214,7 @@ if (isset($_SESSION['user_id']) &&
 						   class="btn btn-warning">
 						   Sửa</a>
 
-						<a href="php/delete-category.php?id=<?=$category['id']?>" 
+						<a href="../Model/delete-category.php?id=<?=$category['id']?>" 
 						   class="btn btn-danger">
 					       Xóa</a>
 					</td>
@@ -259,11 +255,11 @@ if (isset($_SESSION['user_id']) &&
 					<td><?=$k?></td>
 					<td><?=$author['name']?></td>
 					<td>
-						<a href="edit-author.php?id=<?=$author['id']?>" 
+						<a href="../View/edit-author.php?id=<?=$author['id']?>" 
 						   class="btn btn-warning">
 						   Sửa</a>
 
-						<a href="php/delete-author.php?id=<?=$author['id']?>" 
+						<a href="../Model/delete-author.php?id=<?=$author['id']?>" 
 						   class="btn btn-danger">
 					       Xóa</a>
 					</td>

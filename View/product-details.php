@@ -1,12 +1,14 @@
+
 <?php
 session_start(); // Khởi động session nếu chưa có
-
+include '../config/db_conn.php';
 // Kiểm tra xem user_id có tồn tại trong session không
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 } else {
     $user_id = null; // Gán giá trị mặc định nếu user_id không tồn tại
 }
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -17,8 +19,9 @@ if (isset($_SESSION['user_id'])) {
 		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 	</head>
 	<body class="is-preload">
@@ -26,184 +29,252 @@ if (isset($_SESSION['user_id'])) {
 			<div id="wrapper">
 
 				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+   <header id="header">
+        <div class="dropdown show" style="margin:1px;">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa-solid fa-user"></i> 
+         <?php if (isset($_SESSION['user_id'])) : ?>
+         <?php echo $_SESSION['email']; ?>
+         <?php else: ?>
+              Tài khoản
+         <?php endif; ?>
+        </a>
+      
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="View/login-user.php">Đăng nhập</a>
+          <a class="dropdown-item" href="View/registration.php">Đăng ký</a>
+         <?php if (isset($_SESSION['user_id'])): ?> <!-- neu dang nhap se hien -->
+            <a class="dropdown-item" href="../Controller/logout-user.php">Đăng xuất</a>
+          <?php endif; ?>
+        </div>
+      </div>	
+            
+   <div class="inner">
 
-						<a href="../index.php" class="logo">
-								<span class="fa fa-book"></span> <span class="title">Nhà sách Quốc Huy</span>
-						</a>
-						
-							<!-- Biểu tượng giỏ hàng -->
-							<a href="" class="cart-link">
-								<i class="fa-solid fa-cart-shopping"></i> Giỏ Hàng 
-							</a>
+         <!-- Logo -->
+         <div class="header">
+            <a href="../index.php" class="logo">
+            <span class="fa fa-book"></span>
+            <span class="title">Nhà sách Quốc Huy</span>
+            </a>
+        				
+         </div>		
 
+         <!-- Nav -->
+            <nav>
+               <ul>
+                  <li><a href="#menu">Menu</a></li>
+               </ul>
+               
+            </nav>
 
-							<!-- Nav -->
-							
-							
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
+      
+   </header>
 
-						</div>
-					</header>
-				
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="../index.php">Home</a></li>
+<!-- Menu -->
+   <nav id="menu">
+      <h2>Menu</h2>
+      <ul>
+         <li><a href="../index.php" class="active">Trang chủ</a></li>
 
-							<li><a href="products.html" class="active">Products</a></li>
+         <li><a href="View/view-product.php">Sản phẩm</a></li>
+       
+         <li><a href="View/checkout.html">Giỏ hàng</a></li>
 
-							<li><a href="checkout.html">Checkout</a></li>
+         <li class="nav-item dropdown">
+<a href="#" class="dropdown-toggle nav-link">Thể loại</a>
+<ul class="dropdown-menu">
+<li><a class="dropdown-item" href="View/about.html">Văn học</a></li>
+<li><a class="dropdown-item" href="View/test.php">Kỹ năng sống</a></li>
+<li><a class="dropdown-item" href="View/testimonials.html">Testimonials</a></li>
+<li><a class="dropdown-item" href="View/terms.html">Terms</a></li>
+</ul>
+</li>
 
-							<li>
-								<a href="#" class="dropdown-toggle">About</a>
+         <li >
+    <?php if (isset($_SESSION['user_id'])) {?>
+       <a  
+       href="View/admin.php">Admin</a>
+    <?php }else{ ?>
+    <a 
+       href="View/login.php">Login</a>
+    <?php } ?>
 
-								<ul>
-									<li><a href="about.html">About Us</a></li>
-									<li><a href="blog.html">Blog</a></li>
-									<li><a href="testimonials.html">Testimonials</a></li>
-									<li><a href="terms.html">Terms</a></li>
-								</ul>
-							</li>
+  </li>	
 
-							<li><a href="contact.html">Contact Us</a></li>
-						</ul>
-					</nav>
+         <li><a href="View/contact.html">Contact Us</a></li>
+      </ul>
+   </nav>
+
+   <!-- End Menu-->
 
 				<!-- Main -->
-					<div id="main">
-						<div class="inner">
-							<h1>Đời sống bí ẩn của cây (tái bản) <span class="pull-right"><del>150,000 đ</del> 135,000 đ</span></h1>
-							
-							<div class="container-fluid">
-								<div class="row">
-									<div class="col-md-5">
-										<img src="images/doi-song-bi-an-cua-cay-tb-2021.jpg" class="img-fluid" alt="">
-									</div>
-									
-									<div class="col-md-7">
-										<p> <strong>Đời Sống Bí Ẩn Của Cây<br>
-											Chúng cảm thấy gì?<br>
-											Chúng giao tiếp thế nào?<br>
-											Những phát hiện từ Thế Giới Bí Mật</strong></p>
+<div id="main">
+    <?php
+    // Kiểm tra xem id sách có được truyền không
+    if (isset($_GET['id'])) {
+        // Truy vấn dữ liệu sách theo id
+        $get_product = $conn->prepare("SELECT * FROM `books` WHERE id = ?");
+        $get_product->execute([$_GET['id']]);
 
-										<p>Được xem là một trong những quyển sách hay nhất về cây cối, 
-											"Đời sống bí ẩn của cây" mở ra một thế giới kỳ diệu về đời sống xã hội phức 
-											tạp của những khu rừng ôn đới. Những cái cây giao tiếp với nhau, thể hiện cá tính riêng, hỗ trợ 
-											nhau lớn lên, chia sẻ chất dinh dưỡng cho những cá nhân đang chống chọi bệnh tật và thậm chí cảnh báo nhau
-											 về những nguy hiểm sắp xảy ra... Không chỉ gây bất ngờ với những thông tin hấp dẫn về các loài cây cố
-											 i mà lâu nay chúng ta vẫn xem là vô tri vô giác, trong tác phẩm này, Wohlleben còn chia sẻ tình yêu 
-											 sâu sắc của ông đối với cây và rừng, đồng thời giải thích các tiến trình thú vị của sự sống, 
-											cái chết và sự tái sinh mà ông đã quan sát được trong chính khu rừng của mình.</p>
-										
+        // Kiểm tra nếu sách tồn tại
+        if ($get_product->rowCount() > 0) {
+            // Duyệt qua kết quả
+            while ($fetch_get = $get_product->fetch(PDO::FETCH_ASSOC)) {
+    ?>      
+                <div class="inner">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- Hình ảnh sách -->
+                            <div class="col-md-5">
+                            <a class="link-dark d-block text-center" href="../Uploads/files/<?=$fetch_get['file']?>">
 
-							                <form action="add_to_cart.php" method="POST">
-											<div class="col-sm-8">
-												<label class="control-label">Số lượng</label>
-												<div class="row">
-													<div class="col-sm-6">
-														<div class="form-group">
-															<input type="number" name="quantity" id="quantity" min="1" value="1" required>
-														</div>
-													</div>
-													<div class="col-sm-6">
-														<input type="hidden" name="product_id" value="">
-														<input type="submit" class="primary" name="add_to_cart" value="Add to Cart">
-													</div>
-												</div>
-											</div>
-										</form>
-							            </div>
-									</div>
-								</div>
-							</div>
+                            <img src="../Uploads/cover/<?= htmlspecialchars($fetch_get['cover']); ?>" alt="cover"> 
+</a>
+                            </div>
+                            <!-- Thông tin sách -->
+                            <div class="col-md-7">
+                                <div>
+                                    <h3 class="name"><?= htmlspecialchars($fetch_get['title']); ?></h3>
+                                    <p class="description">
+                                        <?= htmlspecialchars($fetch_get['description']); ?>
+                                    </p>
+                                    <h4>Giá: <?= number_format($fetch_get['price'], 0, ',', '.') . " VND"; ?></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <?php
+                // Tính tổng giá
+            }
+        } else {
+            echo "<p>Không tìm thấy sách.</p>";
+        }
+    } else {
+        echo "<p>ID sách không hợp lệ.</p>";
+    }
+    ?>
+<br>
+<h2 class="h2">Các sản phẩm khác</h2>
 
-							<br>
-							<br>
+<section class="product-other">
 
-							<div class="container-fluid">
-								<h2 class="h2">Similar Products</h2>
+<?php 
+  // Truy vấn lấy sách thuộc thể loại 'Thiếu nhi'
+  $select_books = $conn->prepare("SELECT * FROM books ORDER BY RAND() LIMIT 3;");
+  $select_books->execute();
 
-								<!-- Products -->
-								<section class="tiles">
-									<article class="style1">
-										<span class="image">
-											<img src="images/product-2-720x480.jpg" alt="" />
-										</span>
-										<a href="product-details.html">
-											<h2>Lorem ipsum dolor sit amet, consectetur</h2>
-											
-											<p><del>$19.00</del> <strong>$19.00</strong></p>
+  if ($select_books->rowCount() > 0) {
+    while ($book = $select_books->fetch(PDO::FETCH_ASSOC)) {
+      ?>
+      <article class="style3">
+        <span class="image">
+          <img src="../Uploads/cover/<?= htmlspecialchars($book['cover'], ENT_QUOTES, 'UTF-8');  ?> " />
+        </span>
 
-											<p>Vestibulum id est eu felis vulputate hendrerit uspendisse dapibus turpis in </p>
-										</a>
-									</article>
+        <!-- Liên kết đến trang chi tiết sản phẩm -->
+        <a href="product-details.php?id=<?= $book['id'] ?>">
+          <h2><?= htmlspecialchars($book['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+          <p><strong><?= number_format($book['price'], 0, ',', '.') ?> đ</strong></p>
+        </a>
+      </article>
 
-									<article class="style2">
-										<span class="image">
-											<img src="images/product-2-720x480.jpg" alt="" />
-										</span>
-										<a href="product-details.html">
-											<h2>Lorem ipsum dolor sit amet, consectetur</h2>
-											
-											<p><del>$19.00</del> <strong>$19.00</strong></p>
+      <?php
+    }
+  } 
+?>
 
-											<p>Vestibulum id est eu felis vulputate hendrerit uspendisse dapibus turpis in </p>
-										</a>
-									</article>
+</section>
 
-									<article class="style3">
-										<span class="image">
-											<img src="images/product-6-720x480.jpg" alt="" />
-										</span>
-										<a href="product-details.html">
-											<h2>Lorem ipsum dolor sit amet, consectetur</h2>
-											
-											<p><del>$19.00</del> <strong>$19.00</strong></p>
+</div>
+</div>					
+	</body>
+</html>
 
-											<p>Vestibulum id est eu felis vulputate hendrerit uspendisse dapibus turpis in </p>
-										</a>
-									</article>
-								</section>
-							</div>
-						</div>
-					</div>
-
-				<!-- Footer -->
-					<footer id="footer">
+<!-- Footer -->
+	<!-- Footer -->
+    <footer id="footer">
 						<div class="inner">
 							<section>
-								<ul class="icons">
-									<li><a href="#" class="icon style2 fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon style2 fa-facebook"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon style2 fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon style2 fa-linkedin"><span class="label">LinkedIn</span></a></li>
+								<h2>Liên hệ chúng tôi</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<input type="text" name="name" id="name" placeholder="Tên" />
+										</div>
+
+										<div class="field half">
+											<input type="text" name="email" id="email" placeholder="Email" />
+										</div>
+
+										<div class="field">
+											<input type="text" name="subject" id="subject" placeholder="Chủ đề" />
+										</div>
+
+										<div class="field">
+											<textarea name="message" id="message" rows="3" placeholder="Ghi chú"></textarea>
+										</div>
+
+										<div class="field text-right">
+											<label>&nbsp;</label>
+
+											<ul class="actions">
+												<li><input type="submit" value="Gửi tin nhắn" class="primary" /></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+							</section>
+							<section>
+								<h2>Thông tin liên hệ</h2>
+
+								<ul class="alt">
+									<li><span class="fa fa-envelope-o"></span> <a href="#">nhasachquochuy@gmail.com</a></li>
+									<li><span class="fa fa-phone" ></span> 0933705051 </li>
+									<li><span class="fa fa-map-pin"></span> 180 Đ. Cao Lỗ Phường 4, Quận 8, Hồ Chí Minh</li>
 								</ul>
 
-								&nbsp;
+
+								<ul class="icons">
+									<li><a href="#" class="icon style2 fa-facebook"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon style2 fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon style2 fa-twitter"><span class="label">Instagram</span></a></li>
+
+								</ul>
 							</section>
 
 							<ul class="copyright">
-								<li>Copyright © 2020 Company Name </li>
-								<li>Template by: <a href="https://www.phpjabbers.com/">PHPJabbers.com</a></li>
+								<li>Copyright © 2024 Nhà sách Quốc Huy </li>
 							</ul>
 						</div>
 					</footer>
 
-			</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/main.js"></script>
-
+		
+			<div class="zalo-icon">
+    <a href="https://zalo.me/g/crgmzz518" target="_blank">
+      <img src="images/zalo (1).png" alt="Zalo" width="160px">
+    </a>
+  </div>
+  <div class="phone-icon">
+    <a href="tel:0902000341">
+      <i class="fa-solid fa-phone"></i>
+    </a>
+  </div>
+  <button
+        type="button"
+        class="btn btn-primary"
+        id="btn-back-to-top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+  
+			
 	</body>
 </html>
+<!-- Scripts --> 
+<script src="View/assets/js/jquery.min.js"></script>
+<script src="View/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="View/assets/js/jquery.scrolly.min.js"></script>
+<script src="View/assets/js/jquery.scrollex.min.js"></script>
+<script src="View/assets/js/main.js"></script>
+<?php include 'components/alert.php'; ?>

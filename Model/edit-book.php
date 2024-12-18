@@ -5,11 +5,11 @@ session_start();
 if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
-    include "func-validation.php";
+    include "../Controller/func-validation.php";
 
-    include "func-file-upload.php";
+    include "../Controller/func-file-upload.php";
 
 
     /** 
@@ -104,8 +104,7 @@ if (isset($_SESSION['user_id']) &&
 		        $file = upload_file($_FILES['file'], $allowed_file_exs, $path);
                 
                 /**
-				    If error occurred while 
-				    uploading
+				    loi khi upload
 				**/
 		        if ($book_cover['status'] == "error" || 
 		            $file['status'] == "error") {
@@ -113,8 +112,7 @@ if (isset($_SESSION['user_id']) &&
 			    	$em = $book_cover['data'];
 
 			    	/**
-			    	  Redirect to '../edit-book.php' 
-			    	  and passing error message & the id
+			    	  
 			    	**/
 			    	header("Location: ../edit-book.php?error=$em&id=$id");
 			    	exit;
@@ -130,8 +128,7 @@ if (isset($_SESSION['user_id']) &&
 			      unlink($c_p_file);
 
 			      /**
-		              Getting the new file name 
-		              and the new book cover name 
+		              sach moi file moi
 		          **/
 		           $file_URL = $file['data'];
 		           $book_cover_URL = $book_cover['data'];
@@ -150,8 +147,7 @@ if (isset($_SESSION['user_id']) &&
 					$res  = $stmt->execute([$title, $author, $description,$price, $category,$book_cover_URL, $file_URL, $id]);
 
 				    /**
-				      If there is no error while 
-				      updating the data
+				    neu kohng co loi
 				    **/
 				     if ($res) {
 				     	# success message
@@ -168,7 +164,7 @@ if (isset($_SESSION['user_id']) &&
 
 			    }
 		      }else {
-		      	# update just the book cover
+		      	# chi update bookcover
 
 		      	# book cover Uploading
 		        $allowed_image_exs = array("jpg", "jpeg", "png");
@@ -193,7 +189,7 @@ if (isset($_SESSION['user_id']) &&
                   # current book cover path
 			      $c_p_book_cover = "../uploads/cover/$current_cover";
 
-			      # Delete from the server
+			      
 			      unlink($c_p_book_cover);
 
 			      /**
@@ -202,7 +198,7 @@ if (isset($_SESSION['user_id']) &&
 		          **/
 		           $book_cover_URL = $book_cover['data'];
 
-		            # update just the data
+		            # update data
 		          	$sql = "UPDATE books
 		          	        SET title=?,publisher=?,year_published=?,
 		          	            author_id=?,
@@ -222,12 +218,12 @@ if (isset($_SESSION['user_id']) &&
 				     if ($res) {
 				     	# success message
 				     	$sm = "Cap nhat thanh cong!";
-						header("Location: ../edit-book.php?success=$sm&id=$id");
+						header("Location: ../View/edit-book.php?success=$sm&id=$id");
 			            exit;
 				     }else{
 				     	# Error message
 				     	$em = "Unknown Error Occurred!";
-						header("Location: ../edit-book.php?error=$em&id=$id");
+						header("Location: ../View/edit-book.php?error=$em&id=$id");
 			            exit;
 				     }
 
@@ -255,7 +251,7 @@ if (isset($_SESSION['user_id']) &&
 		    	header("Location: ../edit-book.php?error=$em&id=$id");
 		    	exit;
 		    }else {
-              # current book cover path
+              # current book cover
 		      $c_p_file = "../uploads/files/$current_file";
 
 		      # Delete from the server
@@ -315,12 +311,12 @@ if (isset($_SESSION['user_id']) &&
 		     if ($res) {
 		     	# thanh cong
 		     	$sm = "Cập nhật thành công!";
-				header("Location: ../edit-book.php?success=$sm&id=$id");
+				header("Location: ../View/edit-book.php?success=$sm&id=$id");
 	            exit;
 		     }else{
 		     	# loi
 		     	$em = "Unknown Error Occurred!";
-				header("Location: ../edit-book.php?error=$em&id=$id");
+				header("Location: ../Veiw/edit-book.php?error=$em&id=$id");
 	            exit;
 		     }
           } 

@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
 
     /** 
@@ -24,8 +24,8 @@ if (isset($_SESSION['user_id']) &&
 
 		#simple form Validation
 		if (empty($name)) {
-			$em = "The author name is required";
-			header("Location: ../edit-author.php?error=$em&id=$id");
+			$em = "Chưa nhập tên tác giả";
+			header("Location: ../View/edit-author.php?error=$em&id=$id");
             exit;
 		}else {
 			# UPDATE the Database
@@ -41,22 +41,22 @@ if (isset($_SESSION['user_id']) &&
 		    **/
 		     if ($res) {
 		     	# success message
-		     	$sm = "Successfully updated!";
-				header("Location: ../edit-author.php?success=$sm&id=$id");
+		     	$sm = "Cập nhật thành công!";
+				header("Location: ../View/edit-author.php?success=$sm&id=$id");
 	            exit;
 		     }else{
 		     	# Error message
-		     	$em = "Unknown Error Occurred!";
-				header("Location: ../edit-author.php?error=$em&id=$id");
+		     	$em = "Xảy ra lỗi!";
+				header("Location: ../View/edit-author.php?error=$em&id=$id");
 	            exit;
 		     }
 		}
 	}else {
-      header("Location: ../admin.php");
+      header("Location: ../View/admin.php");
       exit;
 	}
 
 }else{
-  header("Location: ../login.php");
+  header("Location: ../View/login.php");
   exit;
 }

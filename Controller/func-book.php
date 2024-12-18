@@ -37,9 +37,9 @@ function get_book($con, $id){
 function search_books($con, $key){
    $key = "%{$key}%";
 
-   $sql  = "SELECT * FROM books 
-            WHERE title LIKE ?
-            OR description LIKE ?";
+   $sql  = "SELECT * FROM books WHERE title LIKE ? OR description LIKE ?";
+           
+            
    $stmt = $con->prepare($sql);
    $stmt->execute([$key, $key]);
 

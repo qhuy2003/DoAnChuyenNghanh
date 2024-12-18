@@ -6,7 +6,7 @@ if (isset($_SESSION['user_id']) &&
     isset($_SESSION['user_email'])) {
 
 	# Database Connection File
-	include "../db_conn.php";
+	include "../config/db_conn.php";
 
 
     /** 
@@ -23,7 +23,7 @@ if (isset($_SESSION['user_id']) &&
 		#simple form Validation
 		if (empty($id)) {
 			$em = "Error Occurred!";
-			header("Location: ../admin.php?error=$em");
+			header("Location: ../View/admin.php?error=$em");
             exit;
 		}else {
             # DELETE the category from Database
@@ -39,17 +39,17 @@ if (isset($_SESSION['user_id']) &&
 		     if ($res) {
 		     	# success message
 		     	$sm = "Xóa tác giả thành công!";
-				header("Location: ../admin.php?success=$sm");
+				header("Location: ../View/admin.php?success=$sm");
 	            exit;
 			 }else {
 			 	$em = "Error Occurred!";
-			    header("Location: ../admin.php?error=$em");
+			    header("Location: ../View/admin.php?error=$em");
                 exit;
 			 }
              
 		}
 	}else {
-      header("Location: ../admin.php");
+      header("Location: ../View/admin.php");
       exit;
 	}
 

@@ -1,24 +1,17 @@
-<?php
-include '../config/db_conn.php';
-	# Book helper function
-   session_start();
-  if (!isset($_SESSION['user_id'])) {
-    echo "<script>
-        alert('Vui lòng đăng nhập để tiếp tục mua hàng!');
-        window.location.href = 'login-user.php';
-    </script>";
-    exit; // Dừng thực hiện mã phía sau
-}
-if (isset($_SESSION['user_id'])) {
-   $user_id = $_SESSION['user_id'];
 
-   // Kiểm tra và hiển thị thông báo chỉ một lần
-   if (!isset($_SESSION['login_success_shown'])) {
-       $success_msg[] = 'Đăng nhập thành công!';
-       $_SESSION['login_success_shown'] = true; // Đánh dấu rằng thông báo đã hiển thị
-   }
+<?php
+session_start(); // Khởi động session nếu chưa có
+include '../config/db_conn.php';
+// Kiểm tra xem user_id có tồn tại trong session không
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+} else {
+    $user_id = null; // Gán giá trị mặc định nếu user_id không tồn tại
 }
-   //them vao gio hang
+$order = isset($_GET['order']) && in_array($_GET['order'], ['ASC', 'DESC']) ? $_GET['order'] : 'ASC'; // Mặc định ASC nếu không hợp lệ
+$select_products = $conn->prepare("SELECT * FROM `books` ORDER BY `price` $order");
+$select_products->execute();
+//them vao gio hang
 if(isset($_POST['add_to_cart'])){
 
    $id = create_unique_id();
@@ -47,34 +40,30 @@ if(isset($_POST['add_to_cart'])){
       $success_msg[] = 'Đã thêm vào giỏ hàng!';
    }
 }
-//sap xep gia tien
-$order = isset($_GET['order']) && in_array($_GET['order'], ['ASC', 'DESC']) ? $_GET['order'] : 'ASC'; // Mặc định ASC nếu không hợp lệ
-$select_products = $conn->prepare("SELECT * FROM `books` ORDER BY `price` $order");
-$select_products->execute();  
 ?>
-
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en">
-<head>
+<html>
+	<head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Sản phẩm</title>
-   <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
    <link rel="stylesheet" href="assets/css/main.css">
-   
-</head>
-<body>
-<div id="wrapper">
 
-<!-- Header -->
+	</head>
+	<body>
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
    <header id="header">
-        
         <div class="dropdown show" style="margin:1px;">
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-user"></i> 
@@ -108,7 +97,8 @@ $select_products->execute();
             $count_cart_items->execute([$user_id]);// truyen tham so , la id  người dùng cần kiểm tra giỏ hàng
             $total_cart_items= $count_cart_items->rowCount();// lay so luong
          ?>
-            <a href="cart.php"> <i class="fa-solid fa-cart-shopping"></i>Giỏ Hàng  <?= $total_cart_items;?></a></div>		
+            <a href="cart.php"> <i class="fa-solid fa-cart-shopping"></i>Giỏ Hàng  <?= $total_cart_items;?></a>
+         </div>		
 
          <!-- Nav -->
             <nav>
@@ -118,7 +108,7 @@ $select_products->execute();
                
             </nav>
 
-      </div>
+      
    </header>
 
 <!-- Menu -->
@@ -127,9 +117,9 @@ $select_products->execute();
       <ul>
          <li><a href="../index.php" class="active">Trang chủ</a></li>
 
-         <li><a href="View/view-product.php">Sản phẩm</a></li>
+         <li><a href="view-product.php">Sản phẩm</a></li>
        
-         <li><a href="View/checkout.html">Giỏ hàng</a></li>
+         <li><a href="checkout.php">Giỏ hàng</a></li>
 
          <li class="nav-item dropdown">
 <a href="#" class="dropdown-toggle nav-link">Thể loại</a>
@@ -190,10 +180,8 @@ $select_products->execute();
 <img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="images/mini3.jpg">
 <img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="images/mini4.png">
 
-
-<br>
-<div  class="categories-aside">
-
+				<!-- Main -->
+<div class="categories-aside">
 <div style="display: flex;">
    <!-- ASIDE DANH MỤC -->
    <aside class="categories" style="width: 15%; padding: 20px; border-radius: 10px;">
@@ -201,90 +189,94 @@ $select_products->execute();
       <h3>Thể loại</h3>
       <ul style="list-style: none; padding: 0;">
        <?php 
-       $select_categories =$conn->prepare("SELECT * FROM categories  ");
+       $select_categories =$conn->prepare("SELECT c.id,c.name FROM categories as c");
        $select_categories->execute();
        if($select_categories->rowCount()>0){
          while($categories=$select_categories->fetch(PDO::FETCH_ASSOC)){?>
             <ul style="list-style: none; padding: 0;">
-                  <li><a href="category.php?id=<?=$categories['id'] ?>&name=<?=$categories['name']?>"> 
+                  <li><a href="category.php?id=<?=$categories['id'] ?>&name=<?=$categories['name'] ?>">
                      <h6><?= $categories['name']; ?></h6></a>
                </li></ul>
          <?php }
        }
        ?>
-
-         <h3>Nhà xuất bản</h3>
+         <h2>Nhà xuất bản</h2>
          <?php 
             $select_publisher =$conn->prepare(" SELECT DISTINCT publisher FROM `books` ;");
             $select_publisher->execute();
             if($select_publisher->rowCount()>0){
                   while($publisher=$select_publisher->fetch(PDO::FETCH_ASSOC)){?>
                         <ul style="list-style: none; padding: 0;">
-                  <li>      <a href="publisher.php?publisher=<?=$publisher['publisher'] ?>"><h6><?= $publisher['publisher']; ?></h6></a>
+                  <li><a href="publisher.php?publisher=<?=trim($publisher['publisher']); ?>">
+                  <h6><?= $publisher['publisher']; ?></h6></a>
                </li></ul>
          <?php }
 
             }
       ?>
      
-   </aside>
- 
+   </aside>  
 
-   <!-- DANH SÁCH SẢN PHẨM -->
+
+   <!-- danh sach san pham -->
    <section class="products" style="width: 85%;">
-      <h1 class="heading">Tất cả sản phẩm</h1>
-      
-      <!-- Sap xep gia -->
-      <div class="dropdown show" style="margin-left: 75%; padding:5px;">
-         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Sắp xếp theo giá
-         </a>
+    
+    <h1 style="padding-left:20px"><?=$_GET['publisher'];?></h1>
 
-         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <div class="sort-options">
-               <a href="?order=ASC" class="dropdown-item" <?= $order === 'ASC' ? 'active' : '' ?>>Sắp xếp giá: Thấp đến Cao</a>
-               <a href="?order=DESC" class="dropdown-item" <?= $order === 'DESC' ? 'active' : '' ?>>Sắp xếp giá: Cao đến Thấp</a>
-            </div>
-         </div>
-      </div>
+<div class="box-container">
+
+    <?php
+    // Kiểm tra xem id sách có được truyền không
+    if (isset($_GET['publisher'])) {?>
       
-      <!-- Hien thi san pham -->
-      <div class="box-container">
+      
+      <?php
+        // Truy vấn dữ liệu nha xuat ban
+        $name_publisher=trim($_GET['publisher']);//xoa khoang trang
+        $get_product = $conn->prepare("SELECT * FROM `books` WHERE publisher = ?");
+        $get_product->execute([$name_publisher]);
+        
+        // Kiểm tra nếu  tồn tại
+       
+?>      
+
          <?php 
-            if($select_products->rowCount() > 0){
-               while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+            if($get_product->rowCount() > 0){
+               while($fetch_get= $get_product->fetch(PDO::FETCH_ASSOC)){
          ?>
          <form action="" method="POST" class="box">
-         <a href="product-details.php?id=<?= $fetch_product['id'] ?>">
-            <img src="../Uploads/cover/<?= $fetch_product['cover']; ?>" class="image" alt="">
+         <a href="product-details.php?id=<?= $fetch_get['id'] ?>">
+            <img src="../Uploads/cover/<?= $fetch_get['cover']; ?>" class="image" alt="">
             
-               <h3 class="name"><?= htmlspecialchars($fetch_product['title'], ENT_QUOTES, 'UTF-8'); ?></h3></a>
-            <input type="hidden" name="product_id" value="<?= $fetch_product['id']; ?>">
+               <h3 class="name"><?= htmlspecialchars($fetch_get['title'], ENT_QUOTES, 'UTF-8'); ?></h3></a>
+            <input type="hidden" name="product_id" value="<?= $fetch_get['id']; ?>">
             <div class="flex">
-               <p class="price"><?= number_format($fetch_product['price'], 0, ',', '.'); ?> đ</p>
+               <p class="price"><?= number_format($fetch_get['price'], 0, ',', '.'); ?> đ</p>
                <h3>Số lượng</h3>
                <input type="number" name="qty" required min="1" value="1" max="99" maxlength="2" class="qty">
             </div>
             <button type="submit" name="add_to_cart" >
                <i class="fa-solid fa-cart-shopping"></i> Thêm Vào Giỏ Hàng
             </button>
-            <a href="checkout.php?id=<?= $fetch_product['id']; ?>" class="delete-btn">Mua Ngay</a>
+            <a href="checkout.php?id=<?= $fetch_get['id']; ?>" class="delete-btn">Mua Ngay</a>
          </form>
          <?php
                }
             } else {
                echo '<p class="empty">Không tìm thấy sản phẩm!</p>';
             }
+          }
          ?>
       </div>
    </section>
 </div>
-</div>
+</div>			
 </body>
 </html>
 
-
-<footer id="footer" >
+<!-- Footer -->
+	<!-- Footer -->
+    <footer id="footer">
 						<div class="inner">
 							<section>
 								<h2>Liên hệ chúng tôi</h2>
@@ -341,8 +333,9 @@ $select_products->execute();
 					</footer>
 
 		
-	
-
+			<
+  
+			
 <!-- Scripts --> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="js/script.js"></script>

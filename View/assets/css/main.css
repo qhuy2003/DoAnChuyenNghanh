@@ -17,7 +17,8 @@ section, summary, time, mark, audio, video {
 	border: 0;
 	font-size: 100%;
 	font: inherit;
-	vertical-align: baseline;}
+	vertical-align: baseline;
+}
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -3509,6 +3510,12 @@ a .ty-pict {
 	gap: 1.5rem;
  }
  
+ .products .box-container h3{
+	display: flex;
+	justify-content: center;
+	
+ }
+ 
  .products .box-container .box{
 	border: var(--border);
 	box-shadow: var(--box-shodow);
@@ -3561,6 +3568,27 @@ a .ty-pict {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 	margin-left: 50px;
  }
+
+.row .btn-buynow{
+	display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff4d4d; 
+    color: #ffffff; 
+    text-decoration: none; 
+    font-size: 16px; 
+    font-weight: bold; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+    text-align: center; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+	margin-left: 50px;
+}
+
+.btn-buynow:hover {
+	background-color: #e63946; 
+    border-color: white; 
+    transform: scale(1.05); 
+}
  .delete-btn:hover {
 	background-color: #e63946; 
     border-color: white; 
@@ -4197,3 +4225,190 @@ label .imgName{
  }
 
 
+ .box .name {
+	-webkit-box-orient: vertical;
+	overflow:visible ; /* Ẩn nội dung vượt quá */
+	height: 3em; /* Đồng đều chiều cao, dựa trên dòng chữ */
+	line-height: 1.5em; /* Điều chỉnh khoảng cách giữa các dòng */
+	font-size: 1rem;
+ }
+
+
+ .categories-aside .categories{
+	background-color: lightgrey;
+	width: 15%; 
+	padding: 20px; 
+	border-radius: 10px;
+	height: 60rem;
+ }
+ .categories-aside .categories a:hover{
+	text-decoration: underline;
+ }
+
+ /* chi tiet san pham */
+
+ .product-other{
+	display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: flex;
+		-moz-flex-wrap: wrap;
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+		position: relative;
+		margin: -2.5em 0 2.5em -2.5em;
+ }
+
+ .product-other article {
+    -moz-transition: -moz-transform 0.5s ease, opacity 0.5s ease;
+    -webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+    -ms-transition: -ms-transform 0.5s ease, opacity 0.5s ease;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    position: relative;
+    width: calc(33.3333333333% - 2.5em);
+    margin: 2.5em 0 0 2.5em;
+}
+
+.product-other article > .image {
+    -moz-transition: -moz-transform 0.5s ease;
+    -webkit-transition: -webkit-transform 0.5s ease;
+    -ms-transition: -ms-transform 0.5s ease;
+    transition: transform 0.5s ease;
+    position: relative;
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.product-other article > .image img {
+    display: block;
+    width: 100%;
+}
+
+.product-other article > .image:before {
+    pointer-events: none;
+    -moz-transition: background-color 0.5s ease, opacity 0.5s ease;
+    -webkit-transition: background-color 0.5s ease, opacity 0.5s ease;
+    -ms-transition: background-color 0.5s ease, opacity 0.5s ease;
+    transition: background-color 0.5s ease, opacity 0.5s ease;
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1.0;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+.product-other article > a {
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    -moz-flex-direction: column;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -moz-align-items: center;
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+    -moz-justify-content: center;
+    -webkit-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+    -moz-transition: background-color 0.5s ease, -moz-transform 0.5s ease;
+    -webkit-transition: background-color 0.5s ease, -webkit-transform 0.5s ease;
+    -ms-transition: background-color 0.5s ease, -ms-transform 0.5s ease;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    border-radius: 4px;
+    border-bottom: 0;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    z-index: 3;
+}
+
+.product-other article > a > :last-child {
+    margin: 0;
+}
+
+.product-other article > a:hover {
+    color: #ffffff !important;
+}
+
+.product-other article > a h2 {
+    margin: 0;
+}
+
+.product-other article > a .content {
+    -moz-transition: max-height 0.5s ease, opacity 0.5s ease;
+    -webkit-transition: max-height 0.5s ease, opacity 0.5s ease;
+    -ms-transition: max-height 0.5s ease, opacity 0.5s ease;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    width: 100%;
+    max-height: 0;
+    line-height: 1.5;
+    margin-top: 0.35em;
+    opacity: 0;
+}
+
+.product-other article > a .content > :last-child {
+    margin-bottom: 0;
+}
+
+.product-other article.style1 > .image:before {
+    background-color: #f2849e;
+}
+
+.product-other article.style2 > .image:before {
+    background-color: #7ecaf6;
+}
+
+.product-other article.style3 > .image:before {
+    background-color: #7bd0c1;
+}
+
+.product-other article.style4 > .image:before {
+    background-color: #c75b9b;
+}
+
+.product-other article.style5 > .image:before {
+    background-color: #ae85ca;
+}
+
+.product-other article.style6 > .image:before {
+    background-color: #8499e7;
+}
+
+body:not(.is-touch) .product-other article:hover > .image {
+    -moz-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+body:not(.is-touch) .product-other article:hover > .image:before {
+    background-color: #333333;
+    opacity: 0.35;
+}
+
+body:not(.is-touch) .product-other article:hover > .image:after {
+    opacity: 0;
+}
+
+body:not(.is-touch) .product-other article:hover .content {
+    max-height: 15em;
+    opacity: 1;  
+}

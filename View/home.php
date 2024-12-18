@@ -1,5 +1,4 @@
 <!-- Main -->
- <?php ?>
 <div id="main">
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 <ol class="carousel-indicators">
@@ -28,10 +27,10 @@
 </a>
 </div>
 <br>
-<a href=""> <img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini1.jpg"></a> 
-<a href=""><img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini2.jpg"></a>
-<a href=""><img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini3.jpg"></a>
-<a href=""><img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini4.png"></a>
+ <img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini1.jpg"> 
+<img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini2.jpg">
+<img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini3.jpg">
+<img class="ty-pict  ty-banner__image   cm-image" alt="" title=""  width="288" height="187"  src="View/images/mini4.png">
 
 
 <br>
@@ -54,24 +53,6 @@ nơi mọi người có thể khám phá, tìm hiểu và thưởng thức thế
 
 <br>
 
-<nav id="navbar-example2" class="navbar navbar-light bg-light px-3">
-  <a class="navbar-brand" href=""><b>Danh mục<b></a>
-  <ul class="nav nav-pills">
-    <li class="nav-item">
-      <a class="nav-link" href="#section1">Bestsellers
-	  </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#section2">Sách tiếng việt</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#section3">Sách giáo khoa</a>
-    </li>
-	<li class="nav-item">
-      <a class="nav-link" href="#section4">Review sách</a>
-    </li>
-  </ul>
-</nav>
 
 
 
@@ -154,94 +135,46 @@ nơi mọi người có thể khám phá, tìm hiểu và thưởng thức thế
 		<p><del>189,000đ</del> <strong>170,000đ</strong></p>
 
 	</a>
-</article>
+
 </section>
 
-<p class="text-center"><a href="View/seemore.php">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
+<p class="text-center"><a href="view-product.php">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
 
 <br>
 
-<h2 class="h2" id="section2">Sách tiếng  việt</h2>
+<h2 class="h2" id="section2">Sách thiếu nhi</h2>
 
 <section class="tiles">
-<article class="style1">
-	<span class="image">
-		<img src="View/images/van-hoc-tuoi-hoa-nha.jpg" alt="" />
-	</span>
-	<a href="View/product-details.html">
-		<h2>Văn Học Tuổi Hoa - Nhà
-		</h2>
-		
-		<p> <strong>65,000đ</strong></p>
 
-	</a>
-</article>
-<article class="style2">
-	<span class="image">
-		<img src="View/images/chuyen-co-tich-cua-vuon.jpg" alt="" />
-	</span>
-	<a href="View/product-details2.php">
-		<h2>Chuyện Cổ Tích Của Vườn</h2>
-		
-		<p> <strong>85,000đ</strong></p>
+<?php 
+  // Truy vấn lấy sách thuộc thể loại 'Thiếu nhi'
+  $select_books = $conn->prepare("SELECT b.id,b.title,b.price,b.cover,b.description FROM books AS b JOIN categories AS c ON b.category_id = c.id WHERE c.name LIKE '%Thiếu nhi%';");
+  $select_books->execute();
 
-	</a>
-</article>
-<article class="style3">
-	<span class="image">
-		<img src="View/images/ky-nang-quan-ly-nhan-su-chuyen-nghiep-tb-2024.jpg" alt="" />
-	</span>
-	<a href="View/product-details.html">
-		<h2>Truyện Đồng Thoại Giúp Em Giỏi Văn - Chuyện Ở Rừng Xanh Thẳm
-		</h2>
-		
-		<p><strong>65,000đ</strong></p>
+  if ($select_books->rowCount() > 0) {
+    while ($book = $select_books->fetch(PDO::FETCH_ASSOC)) {
+      ?>
+      <article class="style3">
+        <span class="image">
+          <img src="../Uploads/cover/<?= htmlspecialchars($book['cover'], ENT_QUOTES, 'UTF-8'); ?>" />
+        </span>
 
-	</a>
-</article>
+        <!-- Liên kết đến trang chi tiết sản phẩm -->
+        <a href="View/product-details.php?id=<?= $book['id'] ?>">
+          <h2><?= htmlspecialchars($book['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+          <p><strong><?= number_format($book['price'], 0, ',', '.') ?> đ</strong></p>
+        </a>
+      </article>
 
-<article class="style4">
-	<span class="image">
-		<img src="View/images/tu-truyen-henry-ford.jpg" alt="" />
-	</span>
-	<a href="View/product-details.html">
-		<h2>Tự Truyện Henry Ford: Cuộc Đời Và Sự Nghiệp Của Tôi
-		</h2>
-		
-		<p><del>250,000đ</del> <strong>199,000đ</strong></p>
+      <?php
+    }
+  } else {
+    echo '<p class="empty">Không có sách thuộc thể loại Thiếu nhi.</p>';
+  }
+?>
 
-	</a>
-</article>
-
-<article class="style5">
-	<span class="image">
-		<img src="View/images/ky-nang-quan-ly-nhan-su-chuyen-nghiep-tb-2024.jpg" alt="" />
-	</span>
-	<a href="View/product-details.html">
-		<h2>Kỹ Năng Quản Lý Nhân Sự Chuyên Nghiệp (Tái bản năm 2024)
-
-		</h2>
-		
-		<p><strong>169,000đ</strong></p>
-
-	</a>
-</article>
-
-<article class="style6">
-	<span class="image">
-		<img src="View/images/marketing-gan-ket.jpg" alt="" />
-	</span>
-	<a href="View/product-details.html">
-		<h2>Participation Marketing - Marketing Gắn Kết
-
-		</h2>
-		
-		<p><strong>168,000đ</strong></p>
-
-	</a>
-</article>
 </section>
-<p class="text-center"><a href="testimonials.html">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
+<p class="text-center"><a href="View/view-product.php">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
 
 <br>
 <h2 class="h2" id="section3">Sách Văn học</h2>
@@ -249,19 +182,15 @@ nơi mọi người có thể khám phá, tìm hiểu và thưởng thức thế
 <section class="tiles">
    <?php
    // Truy vấn để lấy sách thuộc thể loại Văn học
-    $category_vh='Văn học';
-   $select_books = $conn->prepare("
-       SELECT * FROM books AS b JOIN categories AS c ON b.category_id = c.id WHERE c.name LIKE '%Văn học%';
-");
-
-   $select_books->execute([$category_vh]);
-
+  $select_books = $conn->prepare("SELECT b.id,b.title,b.price,b.cover,b.description FROM books AS b JOIN categories AS c ON b.category_id = c.id WHERE c.name LIKE '%Văn học%';");
+   $select_books->execute();
    if ($select_books->rowCount() > 0) {
        while ($book = $select_books->fetch(PDO::FETCH_ASSOC)) {
            ?>
            <article class="style1">
                <span class="image">
-                   <img src="../Uploads/cover/<?= htmlspecialchars($book['cover'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?= htmlspecialchars($book['title'], ENT_QUOTES, 'UTF-8'); ?>" />
+                   <img src="../Uploads/cover/<?= htmlspecialchars($book['cover'], ENT_QUOTES, 'UTF-8'); ?>"
+				     />
                </span>
                <a href="View/product-details.php?id=<?= $book['id']; ?>">
                    <h2><?= htmlspecialchars($book['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
@@ -276,8 +205,76 @@ nơi mọi người có thể khám phá, tìm hiểu và thưởng thức thế
    ?>
 </section>
 
-<p class="text-center"><a href="testimonials.html">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
+<p class="text-center"><a href="view-product.php">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
 
+<h2 class="h2" id="section2">Sách kỹ năng sống</h2>
+
+<section class="tiles">
+
+<?php 
+  // Truy vấn lấy sách thuộc thể loại 'Thiếu nhi'
+  $select_books = $conn->prepare("SELECT b.id,b.title,b.price,b.cover,b.description FROM books AS b JOIN categories AS c ON b.category_id = c.id WHERE c.name LIKE '%Kỹ năng sống';");
+  $select_books->execute();
+
+  if ($select_books->rowCount() > 0) {
+    while ($book = $select_books->fetch(PDO::FETCH_ASSOC)) {
+      ?>
+      <article class="style3">
+        <span class="image">
+          <img src="../Uploads/cover/<?= htmlspecialchars($book['cover'], ENT_QUOTES, 'UTF-8'); ?>" />
+        </span>
+
+        <!-- Liên kết đến trang chi tiết sản phẩm -->
+        <a href="View/product-details.php?id=<?= $book['id'] ?>">
+          <h2><?= htmlspecialchars($book['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+          <p><strong><?= number_format($book['price'], 0, ',', '.') ?> đ</strong></p>
+        </a>
+      </article>
+
+      <?php
+    }
+  } else {
+    echo '<p class="empty">Không có sách thuộc thể loại Thiếu nhi.</p>';
+  }
+?>
+
+</section>
+<p class="text-center"><a href="View/view-product.php">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
+<br>
+
+<h2 class="h2" id="section2">Sách Bài Học Kinh Doanh</h2>
+
+<section class="tiles">
+
+<?php 
+  // Truy vấn lấy sách thuộc thể loại 'Thiếu nhi'
+  $select_books = $conn->prepare("SELECT b.id,b.title,b.price,b.cover,b.description FROM books AS b JOIN categories AS c ON b.category_id = c.id WHERE c.name LIKE 'Bài Học%';");
+  $select_books->execute();
+
+  if ($select_books->rowCount() > 0) {
+    while ($book = $select_books->fetch(PDO::FETCH_ASSOC)) {
+      ?>
+      <article class="style6">
+        <span class="image">
+          <img src="../Uploads/cover/<?= htmlspecialchars($book['cover'], ENT_QUOTES, 'UTF-8'); ?>" />
+        </span>
+
+        <!-- Liên kết đến trang chi tiết sản phẩm -->
+        <a href="View/product-details.php?id=<?= $book['id'] ?>">
+          <h2><?= htmlspecialchars($book['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+          <p><strong><?= number_format($book['price'], 0, ',', '.') ?> đ</strong></p>
+        </a>
+      </article>
+
+      <?php
+    }
+  } else {
+    echo '<p class="empty">Không có sách thuộc thể loại Thiếu nhi.</p>';
+  }
+?>
+
+</section>
+<p class="text-center"><a href="View/view-product.php">Xem thêm &nbsp;<i class="fa fa-long-arrow-right"></i></a></p>
 <br>
 <h2 class="h2" id="section4">Review sách hay</h2>
 
